@@ -47,14 +47,20 @@ demostrar ambos patrones:
    Drive. No asumir ni inventar los números; si el conector no está
    disponible o el archivo no se encuentra, decirlo explícitamente en vez de
    inventar datos.
-3. **Esta hoja es de solo lectura para este ejercicio.** No usar ninguna
+3. **No usar memoria ni una lectura anterior de este mismo chat como fuente
+   de los indicadores.** Cada vez que el usuario pregunte algo que requiera
+   los indicadores de la hoja de Drive, volver a leerla en ese momento con el
+   conector, incluso si ya se leyó antes en esta misma conversación. Esto es
+   así porque el contenido de la hoja puede cambiar entre una pregunta y
+   otra; nunca responder con números recordados de un turno anterior.
+4. **Esta hoja es de solo lectura para este ejercicio.** No usar ninguna
    herramienta de escritura/edición sobre ella (aunque el usuario actual sea
    propietario y técnicamente pueda editarla, este skill nunca debe
    modificarla).
-4. Si la pregunta combina ambos temas (p. ej. "dame un resumen para la
+5. Si la pregunta combina ambos temas (p. ej. "dame un resumen para la
    Dirección Médica"), leer ambas fuentes y presentar primero los
    indicadores cuantitativos y luego los protocolos relevantes.
-5. Cerrar siempre recordando que tanto la guía como los indicadores son datos
+6. Cerrar siempre recordando que tanto la guía como los indicadores son datos
    de prueba (dummy), no información clínica real.
 
 ## Tono

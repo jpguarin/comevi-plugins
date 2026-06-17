@@ -36,6 +36,21 @@ quisieras un bloqueo técnico real, deberías compartir el archivo como
 "Lector" con la cuenta que usa el conector, en vez de ser tú el propietario
 con permisos de edición.
 
+## Frescura de los datos dentro de la misma conversación
+
+El skill está instruido para **nunca reutilizar una lectura anterior del
+Sheet dentro del mismo chat**. Cada vez que vuelvas a preguntar algo sobre
+indicadores médicos, Claude relee el Sheet en ese momento en lugar de confiar
+en lo que recordaba de un turno anterior — así, si cambias un valor en Drive
+a mitad de la conversación, la siguiente respuesta ya refleja el cambio.
+
+Nota técnica: esto se logra con una instrucción explícita en el `SKILL.md`,
+no con un hook. Los hooks de tipo comando corren en tu entorno local, pero
+los conectores de Cowork (como Google Drive) solo son accesibles por Claude
+durante su propio turno — un hook no puede llamarlos directamente sin
+credenciales propias de Google, que quedan fuera del alcance de este
+ejercicio dummy.
+
 ## Uso
 
 Pide, por ejemplo:
