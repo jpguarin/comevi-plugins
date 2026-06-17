@@ -1,0 +1,8 @@
+{
+  "name": "comevi-director-medico",
+  "description": "Asistente para la Dirección Médica de Comevi: protocolos clínicos internos e indicadores médicos de calidad asistencial.",
+  "author": {
+    "name": "Comevi"
+  },
+  "keywords": ["director-medico", "protocolos-clinicos", "indicadores-medicos", "comevi"]
+}
