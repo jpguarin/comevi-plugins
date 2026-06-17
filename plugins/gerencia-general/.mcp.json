@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "bi-dashboard-dummy": {
+      "type": "http",
+      "url": "https://dummy.comevi.local/mcp/bi",
+      "headers": {
+        "Authorization": "Bearer ${COMEVI_BI_TOKEN}"
+      }
+    }
+  }
+}

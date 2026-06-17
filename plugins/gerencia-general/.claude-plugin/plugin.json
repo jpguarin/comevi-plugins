@@ -1,0 +1,8 @@
+{
+  "name": "comevi-gerencia-general",
+  "description": "Asistente para Gerencia General de Comevi: resumen ejecutivo, KPIs globales y seguimiento de indicadores consolidados de la organización.",
+  "author": {
+    "name": "Comevi"
+  },
+  "keywords": ["gerencia", "kpis", "resumen-ejecutivo", "comevi"]
+}

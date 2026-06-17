@@ -1,0 +1,39 @@
+{
+  "name": "comevi-plugins",
+  "owner": {
+    "name": "Comevi"
+  },
+  "description": "Marketplace personal de prueba con un plugin por área para Comevi (datos y conectores dummy, uso educativo).",
+  "plugins": [
+    {
+      "name": "comevi-gerencia-general",
+      "source": "./plugins/gerencia-general",
+      "description": "Resumen ejecutivo y KPIs consolidados de Comevi para Gerencia General."
+    },
+    {
+      "name": "comevi-director-medico",
+      "source": "./plugins/director-medico",
+      "description": "Protocolos clínicos e indicadores médicos para la Dirección Médica."
+    },
+    {
+      "name": "comevi-gerente-comercial",
+      "source": "./plugins/gerente-comercial",
+      "description": "Tarifario, convenios y pipeline comercial para la Gerencia Comercial."
+    },
+    {
+      "name": "comevi-operaciones",
+      "source": "./plugins/operaciones",
+      "description": "Capacidad instalada, turnos e indicadores operativos para Operaciones."
+    },
+    {
+      "name": "comevi-recursos-humanos",
+      "source": "./plugins/recursos-humanos",
+      "description": "Políticas, selección y desempeño de talento para Recursos Humanos."
+    },
+    {
+      "name": "comevi-facturacion-eps",
+      "source": "./plugins/facturacion-eps",
+      "description": "Radicación, glosas y tarifario EPS para el área de Facturación."
+    }
+  ]
+}
