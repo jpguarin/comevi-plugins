@@ -6,13 +6,13 @@
 ## Indicadores mensuales
 
 | Indicador                          | Marzo 2026 | Abril 2026 | Mayo 2026 |
-| ----------------------------------- | ---------- | ---------- | --------- |
+| ----------------------------------- | ---------- | ---------- |-----------|
 | Ingresos totales (COP millones)     | 4.820      | 5.010      | 4.690     |
 | Pacientes atendidos                 | 3.412      | 3.560      | 3.301     |
 | Ocupación de consultorios (%)       | 78%        | 82%        | 71%       |
 | Ocupación de camas hospitalarias (%)| 64%        | 69%        | 66%       |
 | Tiempo promedio de espera (min)     | 22         | 19         | 27        |
-| NPS (satisfacción del paciente)     | 61         | 65         | 58        |
+| NPS (satisfacción del paciente)     | 61         | 65         | 45        |
 | Glosas EPS pendientes (COP millones)| 312        | 298        | 340       |
 | Rotación de personal (%)            | 3.1%       | 2.8%       | 3.6%      |
 
