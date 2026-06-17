@@ -12,7 +12,7 @@
 | Ocupación de consultorios (%)       | 78%        | 82%        | 71%       |
 | Ocupación de camas hospitalarias (%)| 64%        | 69%        | 66%       |
 | Tiempo promedio de espera (min)     | 22         | 19         | 27        |
-| NPS (satisfacción del paciente)     | 61         | 65         | 70        |
+| NPS (satisfacción del paciente)     | 61         | 65         | 75        |
 | Glosas EPS pendientes (COP millones)| 312        | 298        | 340       |
 | Rotación de personal (%)            | 3.1%       | 2.8%       | 3.6%      |
 
