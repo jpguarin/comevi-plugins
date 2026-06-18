@@ -47,12 +47,25 @@ demostrar ambos patrones:
    Drive. No asumir ni inventar los números; si el conector no está
    disponible o el archivo no se encuentra, decirlo explícitamente en vez de
    inventar datos.
-3. **No usar memoria ni una lectura anterior de este mismo chat como fuente
-   de los indicadores.** Cada vez que el usuario pregunte algo que requiera
-   los indicadores de la hoja de Drive, volver a leerla en ese momento con el
-   conector, incluso si ya se leyó antes en esta misma conversación. Esto es
-   así porque el contenido de la hoja puede cambiar entre una pregunta y
-   otra; nunca responder con números recordados de un turno anterior.
+3. **Estrategia eficiente en tokens para verificar si los datos cambiaron:**
+   a. Llamar primero a `get_file_metadata` con el ID de arriba, **sin**
+      `excludeContentSnippets`. Esta llamada es más liviana que
+      `read_file_content` o `download_file_content`, y para un archivo de
+      este tamaño ya devuelve el contenido completo en el campo
+      `contentSnippet`, junto con `modifiedTime`.
+   b. Si ya se consultó este archivo antes en la misma conversación, comparar
+      el `modifiedTime` nuevo contra el que se vio la última vez:
+      - Si es **igual**, los datos no cambiaron: se puede responder con lo
+        que ya se leyó, sin necesidad de re-analizar nada adicional.
+      - Si es **distinto** (o es la primera vez en este chat), usar el
+        `contentSnippet` de esta respuesta como la fuente de verdad actual.
+   c. Solo si el `contentSnippet` luce truncado o incompleto (por ejemplo, el
+      archivo creció mucho más de lo esperado), complementar con
+      `read_file_content` para traer el contenido íntegro. No usar
+      `read_file_content` ni `download_file_content` por defecto si el
+      `contentSnippet` ya es suficiente.
+   d. Nunca responder con números recordados de un turno anterior sin haber
+      hecho al menos la llamada liviana del paso (a) en el turno actual.
 4. **Esta hoja es de solo lectura para este ejercicio.** No usar ninguna
    herramienta de escritura/edición sobre ella (aunque el usuario actual sea
    propietario y técnicamente pueda editarla, este skill nunca debe

@@ -36,13 +36,17 @@ quisieras un bloqueo técnico real, deberías compartir el archivo como
 "Lector" con la cuenta que usa el conector, en vez de ser tú el propietario
 con permisos de edición.
 
-## Frescura de los datos dentro de la misma conversación
+## Frescura de los datos dentro de la misma conversación (optimizado en tokens)
 
-El skill está instruido para **nunca reutilizar una lectura anterior del
-Sheet dentro del mismo chat**. Cada vez que vuelvas a preguntar algo sobre
-indicadores médicos, Claude relee el Sheet en ese momento en lugar de confiar
-en lo que recordaba de un turno anterior — así, si cambias un valor en Drive
-a mitad de la conversación, la siguiente respuesta ya refleja el cambio.
+El skill usa una estrategia de "metadata primero": en lugar de descargar
+siempre el contenido completo, llama a `get_file_metadata` (sin excluir
+`contentSnippet`), que es más liviano que `read_file_content` y, para un
+archivo de este tamaño, ya trae el contenido completo junto con
+`modifiedTime` en una sola llamada. Si el `modifiedTime` no cambió respecto
+a la última vez que se consultó en el mismo chat, no hace falta reprocesar
+nada; si cambió, se usan los datos nuevos de esa misma respuesta. Solo se
+escala a `read_file_content`/`download_file_content` si el `contentSnippet`
+luce truncado (relevante para Sheets mucho más grandes que este).
 
 Nota técnica: esto se logra con una instrucción explícita en el `SKILL.md`,
 no con un hook. Los hooks de tipo comando corren en tu entorno local, pero
