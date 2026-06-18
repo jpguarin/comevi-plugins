@@ -75,16 +75,17 @@ no van en `.mcp.json`
 del directorio de Anthropic ya están conectados a nivel de cuenta del usuario
 y se referencian directamente en las instrucciones del `SKILL.md`.
 
-### 4. Estrategia de frescura de datos para Google Drive
-Para fuentes en Google Drive, el skill usa siempre esta secuencia:
-1. `get_file_metadata` (sin `excludeContentSnippets`) → trae `modifiedTime` +
-   `contentSnippet` en una sola llamada liviana.
-2. Comparar `modifiedTime` con la última lectura del mismo chat.
-3. Si no cambió → usar lo que ya se leyó.
-4. Si cambió → usar el `contentSnippet` de esa respuesta.
-5. Solo si el `contentSnippet` está truncado → escalar a `read_file_content`.
-6. **Nunca usar `download_file_content` para leer contenido** (base64, más
-   tokens, más difícil de parsear para Claude).
+### 4. Reglas para manipulación de Google Drive
+Para fuentes en Google Drive, los skills siguen estas reglas:
+1. **Siempre usar `read_file_content`** para leer el archivo. No usar
+   `get_file_metadata` ni `download_file_content`.
+2. **Siempre hacer el request en cada turno** que requiera datos del archivo,
+   ya que la información es dinámica y puede cambiar con frecuencia entre turnos.
+3. **Nunca responder con números recordados de un turno anterior**; siempre
+   leer el archivo fresco en el turno actual.
+4. **Los archivos son de solo lectura.** No usar ninguna herramienta de
+   escritura o edición sobre ellos (aunque el usuario actual sea propietario
+   y técnicamente pueda editarlos, los skills nunca deben modificarlos).
 
 ---
 

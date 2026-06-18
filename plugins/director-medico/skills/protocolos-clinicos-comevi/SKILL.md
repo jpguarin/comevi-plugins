@@ -34,8 +34,8 @@ demostrar ambos patrones:
    (ID: `1Kdj1HOlAsJIeXAWWCt7zF9xxJvUASebA_R_gYEYDeIM`), que vive en Google
    Drive y no está empaquetada en el plugin. Para leerla, usar las
    herramientas del conector de Google Drive ya conectado (por ejemplo,
-   `search_files` por el nombre exacto, o `get_file_metadata` /
-   `download_file_content` directamente con el ID anterior).
+   `search_files` por el nombre exacto, o `read_file_content`
+   directamente con el ID anterior).
 
 ## Instrucciones
 
@@ -43,37 +43,25 @@ demostrar ambos patrones:
    cualitativos: leer `references/guias-clinicas.md`.
 2. Si la pregunta es sobre indicadores médicos cuantitativos (readmisión,
    sepsis, eventos adversos, infecciones, satisfacción): leer la hoja de
-   cálculo de Google Drive descrita arriba usando el conector de Google
-   Drive. No asumir ni inventar los números; si el conector no está
+   cálculo de Google Drive descrita arriba usando `read_file_content` con el
+   ID anterior. No asumir ni inventar los números; si el conector no está
    disponible o el archivo no se encuentra, decirlo explícitamente en vez de
    inventar datos.
-3. **Estrategia eficiente en tokens para verificar si los datos cambiaron:**
-   a. Llamar primero a `get_file_metadata` con el ID de arriba, **sin**
-      `excludeContentSnippets`. Esta llamada es más liviana que
-      `read_file_content` o `download_file_content`, y para un archivo de
-      este tamaño ya devuelve el contenido completo en el campo
-      `contentSnippet`, junto con `modifiedTime`.
-   b. Si ya se consultó este archivo antes en la misma conversación, comparar
-      el `modifiedTime` nuevo contra el que se vio la última vez:
-      - Si es **igual**, los datos no cambiaron: se puede responder con lo
-        que ya se leyó, sin necesidad de re-analizar nada adicional.
-      - Si es **distinto** (o es la primera vez en este chat), usar el
-        `contentSnippet` de esta respuesta como la fuente de verdad actual.
-   c. Solo si el `contentSnippet` luce truncado o incompleto (por ejemplo, el
-      archivo creció mucho más de lo esperado), complementar con
-      `read_file_content` para traer el contenido íntegro. No usar
-      `read_file_content` ni `download_file_content` por defecto si el
-      `contentSnippet` ya es suficiente.
-   d. Nunca responder con números recordados de un turno anterior sin haber
-      hecho al menos la llamada liviana del paso (a) en el turno actual.
-4. **Esta hoja es de solo lectura para este ejercicio.** No usar ninguna
-   herramienta de escritura/edición sobre ella (aunque el usuario actual sea
-   propietario y técnicamente pueda editarla, este skill nunca debe
-   modificarla).
-5. Si la pregunta combina ambos temas (p. ej. "dame un resumen para la
+3. **Reglas para manipulación de Google Drive:**
+   - Siempre usar `read_file_content` para leer el archivo. No usar
+     `get_file_metadata` ni `download_file_content`.
+   - Siempre hacer el request en cada turno que requiera datos de
+     indicadores, ya que la información es dinámica y puede cambiar con
+     frecuencia entre turnos.
+   - Nunca responder con números recordados de un turno anterior; siempre
+     leer el archivo fresco en el turno actual.
+   - El archivo es de solo lectura. No usar ninguna herramienta de
+     escritura o edición sobre él (aunque el usuario actual sea propietario
+     y técnicamente pueda editarlo, este skill nunca debe modificarlo).
+4. Si la pregunta combina ambos temas (p. ej. "dame un resumen para la
    Dirección Médica"), leer ambas fuentes y presentar primero los
    indicadores cuantitativos y luego los protocolos relevantes.
-6. Cerrar siempre recordando que tanto la guía como los indicadores son datos
+5. Cerrar siempre recordando que tanto la guía como los indicadores son datos
    de prueba (dummy), no información clínica real.
 
 ## Tono

@@ -75,42 +75,31 @@ un conector roto que confundiría al usuario.
 
 ---
 
-## D5 — Estrategia metadata-first para leer Google Drive
+## D5 — Estrategia de lectura directa para Google Drive
 
-**Decisión:** Para cualquier fuente de Google Drive, el skill siempre llama
-primero a `get_file_metadata` (sin `excludeContentSnippets`) antes de
-decidir si descarga el contenido completo.
+**Decisión:** Para cualquier fuente de Google Drive, el skill siempre usa
+`read_file_content` en cada turno que necesite los datos. No se usa
+`get_file_metadata` ni `download_file_content`.
 
-**Por qué — tres razones:**
+**Por qué:** Las fuentes en Drive son datos dinámicos que pueden cambiar entre
+turnos de la misma conversación (alguien puede editar el Sheet mientras habla
+con el skill). Cualquier estrategia de caché basada en `modifiedTime` añade
+complejidad para un beneficio marginal en tokens, y abre la puerta a responder
+con datos desactualizados. Leer siempre con `read_file_content` garantiza que
+cada respuesta refleja el estado real del archivo en ese momento.
 
-1. **Frescura:** el `modifiedTime` de la metadata permite saber si el archivo
-   cambió desde la última lectura en el mismo chat. Si no cambió, se reutiliza
-   lo ya leído sin gastar tokens adicionales.
+**Por qué no `download_file_content`:** devuelve el contenido en base64,
+que Claude tiene que "decodificar" mentalmente y ocupa más tokens que el
+texto plano que entrega `read_file_content`.
 
-2. **Eficiencia:** para archivos pequeños/medianos, `get_file_metadata` ya
-   trae el contenido completo en el campo `contentSnippet` en una sola llamada
-   más liviana que `read_file_content`.
-
-3. **Costo real medido (Sheet de Director Médico, junio 2026):**
-   - `read_file_content` → 607 caracteres (tabla markdown limpia)
-   - `download_file_content` → 668 caracteres (base64, +36% overhead)
-   - `get_file_metadata` con contentSnippet → ~mismo contenido que
-     read_file_content pero en una sola llamada que además trae modifiedTime.
-
-**Flujo completo:**
-```
-get_file_metadata (sin excludeContentSnippets)
-  → ¿modifiedTime igual al último visto en este chat?
-      SÍ → usar lo que ya se leyó, no gastar más tokens
-      NO (o primera vez) → usar contentSnippet como fuente de verdad
-          → ¿contentSnippet parece truncado?
-              SÍ → escalar a read_file_content
-              NO → responder con el contentSnippet
-```
-
-**Regla derivada:** nunca usar `download_file_content` para leer contenido
-que Claude necesita entender — es base64, Claude lo tiene que "decodificar"
-mentalmente, y siempre ocupa más tokens que el texto plano equivalente.
+**Reglas derivadas (todas en SKILL.md y CLAUDE.md):**
+- Siempre `read_file_content`, nunca `get_file_metadata` ni
+  `download_file_content`.
+- Hacer el request en cada turno, sin excepción.
+- Nunca responder con números recordados de un turno anterior.
+- Los archivos son de solo lectura: ningún skill debe escribir o editar sobre
+  ellos (ver D6 para el razonamiento de por qué esto es behavioral, no
+  técnico).
 
 ---
 
@@ -136,8 +125,8 @@ a la cuenta propietaria del archivo.
 
 **Decisión:** Las referencias estáticas (`.md` bundleados en el plugin) se
 leen una vez por conversación y no se refrescan. Las referencias vivas
-(Google Drive u otras fuentes externas) usan la estrategia metadata-first
-(D5) en cada uso dentro de la misma conversación.
+(Google Drive u otras fuentes externas) se leen con `read_file_content`
+en cada turno dentro de la misma conversación (ver D5).
 
 **Por qué:** Refrescar referencias estáticas en cada turno no tiene sentido
 — el contenido solo puede cambiar si alguien hace un commit al repo y el
